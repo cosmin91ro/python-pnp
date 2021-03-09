@@ -15,7 +15,8 @@ class ChatListener(threading.Thread):
         while True:
             res = client.recv(1024).decode("utf-8")
             if res != "":
-                print(res)     
+                print(f"\r\n{res}")   
+                print("Enter message: ", end="", flush=True)  
 
 
 username = input("Enter username: ")    
@@ -24,12 +25,10 @@ chat = ChatListener(username)
 chat.daemon = True
 chat.start()
 while True:
-    print("Enter message: ")
     msg = input()  
     client.send(msg.encode("utf-8"))
     if msg == "/exit":
         print("Bye bye")
         sys.exit()
-        break
 
 
