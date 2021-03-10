@@ -6,7 +6,7 @@ class Heartbeat(threading.Thread):
     def run(self):
         global client
         while True:
-            print("Heartbeat " , client.recv(128).decode("utf-8"))
+            print(client.recv(128).decode("utf-8"))
 
 
 
@@ -16,5 +16,5 @@ client.send(b"Hello")
 Heartbeat().start()
 day = 0
 while True:
-    client.send(f"Hello, groundhog day {day}".encode("utf-8")) 
-    time.sleep(10)
+    client.send("heart".encode("utf-8")) 
+    time.sleep(5)

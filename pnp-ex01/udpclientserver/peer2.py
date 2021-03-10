@@ -15,4 +15,4 @@ client = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 client.connect(("localhost",8005))
 
 for i in range(100000):
-    client.send(f"Peer 1 # {i}".encode("utf-8"))
+    client.send(f"Peer 2 # {i}".encode("utf-8"))
