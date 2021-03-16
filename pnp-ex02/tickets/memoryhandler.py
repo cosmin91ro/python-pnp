@@ -1,12 +1,11 @@
 import os 
 import datetime
-import shutil
 
 tickets = {}
 
 def insertticket():
     newTicketId = len(tickets.items())+ 1
-    tickets[newTicketId] = {
+    tickets[str(newTicketId)] = {
         "date": datetime.datetime.now(),
         "used": False
     }

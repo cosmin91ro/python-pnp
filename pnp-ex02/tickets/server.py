@@ -1,7 +1,6 @@
 import socket
 import threading 
 import memoryhandler
-import filehandler
 
 def accept(sock):
     conn, addr = sock.accept()
@@ -39,19 +38,13 @@ class HttpHandler(threading.Thread):
                 elif not bodyData: 
                     body = "Not a valid body"
                     code = "400 Bad Request"
-                else: 
-                    ticketId = -1 
+                else:
                     print(f"Validating ticket {bodyData}")
-                    try:
-                        ticketId = int(bodyData)
-                    except:
-                        body = "Not a valid ticket code"
-                        code = "400 Bad Request"
-                    if ticketId == -1:
+                    if not bodyData.isnumeric():
                         body = "Not a valid ticket code"
                         code = "400 Bad Request"
                     else:
-                        body = memoryhandler.checkout(ticketId)
+                        body = memoryhandler.checkout(bodyData)
             else:
                 body = "Not a valid command"
                 code = "400 Bad Request"
