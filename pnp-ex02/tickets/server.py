@@ -1,6 +1,7 @@
 import socket
 import threading 
 import memoryhandler
+import filehandler
 
 def accept(sock):
     conn, addr = sock.accept()
@@ -21,17 +22,17 @@ class HttpHandler(threading.Thread):
         bodyData = parts[len(parts)-1]  
 
         description = parts[0].split(" ")
-        filename = description[1].replace("/","")
+        resource = description[1].replace("/","")
         method = description[0]
         code = "200 OK"
         
-        if(not filename):
+        if(not resource):
             body = "This is not a valid page"
             code = "404 Not Found"
         else:  
-            if filename == "insert":
+            if resource == "insert":
                 body = memoryhandler.insertticket()
-            elif filename == "checkout": 
+            elif resource == "checkout":
                 if method.lower() != "post":
                     body = "You must use post method on this page"
                     code = "405 Method Not Allowed" 
@@ -55,6 +56,7 @@ class HttpHandler(threading.Thread):
                 body = "Not a valid command"
                 code = "400 Bad Request"
         
+            print(F"Returning {body}")
             protocol = "HTTP/1.1"
             self.sock.send(f"{protocol} {code}\r\nContent-Type: text/html\r\nConnection: Close\r\n\r\n{body}".encode("utf-8")) 
             self.sock.close()

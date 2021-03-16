@@ -5,16 +5,16 @@ import shutil
 tickets = {}
 
 def insertticket():
-    newTicketId = len(tickets.items())
+    newTicketId = len(tickets.items())+ 1
     tickets[newTicketId] = {
         "date": datetime.datetime.now(),
-        "valid": True
+        "used": False
     }
     return newTicketId
 
 def checkout(id):
     if id in tickets.keys():
-        if tickets[id]["valid"]:
-            tickets[id]["valid"] = False
+        if not tickets[id]["used"]:
+            tickets[id]["used"] = True
             return True
     return False

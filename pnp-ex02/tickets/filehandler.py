@@ -7,6 +7,7 @@ LastTicket = -1
 FileLocked = False
 def getlineparts(line):
     return line.split("|")
+
 def getlastticket(): 
     global LastTicket
     if(LastTicket > 0):
@@ -40,7 +41,7 @@ def insertticket():
     FileLocked = True 
     ticketfile = open(TicketFileName, "a")
     print(f"Inserting ticket {newTicketId}")
-    ticketfile.write(f"{newTicketId}|{datetime.datetime.now()}|0\r\n")   
+    ticketfile.write(f"{newTicketId}|{datetime.datetime.now()}|0\n")   
     ticketfile.close() 
     FileLocked = False
     LastTicket = newTicketId
@@ -48,7 +49,6 @@ def insertticket():
 
 def checkout(code):
     ticket_valid = False
-    lastTicket = getlastticket() + 1
     global TicketFileName
     global FileLocked
     while FileLocked: pass
@@ -56,6 +56,7 @@ def checkout(code):
     try: 
         ticketfile  = open(TicketFileName, "r")
     except:
+        print("ERROR: Cannot open the tickets file")
         FileLocked = False
         return False
     tmpfile     = open("ticketstmp.txt", "w")
@@ -64,7 +65,7 @@ def checkout(code):
         parts = getlineparts(ln)
         if int(parts[0]) == code:
             if parts[2].strip() == "0":
-                tmpfile.writelines(f"{parts[0]}|{parts[1]}|1\r\n")
+                tmpfile.writelines(f"{parts[0]}|{parts[1]}|1\n")
                 ticket_valid = True
             else:
                 tmpfile.writelines(ln)
@@ -75,4 +76,4 @@ def checkout(code):
     tmpfile.close()
     shutil.move("ticketstmp.txt",TicketFileName)
     FileLocked = False
-    return ticket_valid 
+    return ticket_valid
