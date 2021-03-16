@@ -7,7 +7,7 @@ DATABASEFILE = "database.json"
 
 def deserialize():
     tickets = {}
-    if os.stat(DATABASEFILE).st_size > 0:
+    if os.path.exists(DATABASEFILE) and os.stat(DATABASEFILE).st_size > 0:
         fin = open(DATABASEFILE)
         tickets = json.load(fin)
         fin.close()
