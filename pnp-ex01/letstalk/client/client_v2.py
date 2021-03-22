@@ -36,6 +36,7 @@ while True:
     if chatServerIP != None: break
 
 if chatServerIP is not None:
+    os.system("cls")
     username = input("Enter username: ")    
     # Starting the chat listener in a separate thread
     # to keep the user input() in the main thread
