@@ -6,11 +6,7 @@ from urllib.parse import urlparse
 from urllib.error import HTTPError
 
 url = 'http://localhost:8005/protected'  # + sys.argv[1]
-# if you want to run this example you'll need to supply
-# a protected page with your username and password
 
-username = ""
-password = ""            # a very bad password
 
 req = httpclient.Request(url)
 try:
@@ -36,6 +32,8 @@ except HTTPError as e:
             print('This example only works with BASIC authentication.')
             sys.exit(1)
 
+        username = input("Username: ")
+        password = input("Password: ")
         base64string = base64.b64encode(f"{username}:{password}".encode("ascii")).decode("ascii")
         authheader =  "Basic %s" % base64string
         req.add_header("Authorization", authheader)
