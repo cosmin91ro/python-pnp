@@ -38,6 +38,7 @@ ser.bind(("localhost",8005))
 ser.listen()
 sock,addr = ser.accept()  
 headers = sock.recv(1024).decode("utf-8").splitlines()
+print(headers)
 wsguid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 hashedkey = "" 
 for h in headers:
@@ -46,14 +47,22 @@ for h in headers:
         key = kvp[0].strip()
         val = kvp[1].strip()
         if key == 'Sec-WebSocket-Key':  
+            print(f"Received WS Key: {val}")
             fk = f"{val}{wsguid}" 
             fk = hashlib.sha1(fk.encode("utf-8"))  
             hashedkey = base64.encodebytes(fk.digest()).decode("utf-8")
+            
+upgradeAnswer = ("HTTP/1.1 101 Switching Protocols\r\n" + \
+                "Upgrade: websocket\r\n" + \
+                "Connection: Upgrade\r\n" + \
+                f"Sec-WebSocket-Accept: {hashedkey}\r\n").encode("utf-8")
 
-sock.send(f"HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: {hashedkey}\r\n".encode("utf-8"))
+print(f"Answering:\n{upgradeAnswer}")
+sock.send(upgradeAnswer)
 
 while True:
     msg = sock.recv(1024).strip() 
     if msg: 
         msgbts = bytearray(msg)
         parseframe(msgbts)
+
